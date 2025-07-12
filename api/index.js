@@ -1,4 +1,3 @@
-// api/index.js – ZeroToTraffic backend
 import express from 'express';
 import cors from 'cors';
 import { GoogleGenerativeAI } from '@google/generative-ai';
@@ -20,11 +19,10 @@ async function generate(prompt) {
   }
 }
 
-// ✅ /api/suggest-topics
 app.post('/api/suggest-topics', async (req, res) => {
   const { niche } = req.body || {};
   if (!niche) return res.json({ topics: [] });
-  const prompt = `Give 10 catchy blog/LinkedIn topics for a ${niche} business. Return only a JSON array of strings.`;
+  const prompt = `Give 10 catchy blog/LinkedIn topics for a ${niche} business. Return only a JSON array.`;
   try {
     const text = await generate(prompt);
     const cleaned = text.replace(/```json|```/g, '').trim();
@@ -35,7 +33,6 @@ app.post('/api/suggest-topics', async (req, res) => {
   }
 });
 
-// ✅ /api/generate-blog
 app.post('/api/generate-blog', async (req, res) => {
   const { topic, length = 400 } = req.body || {};
   if (!topic) return res.json({ markdown: '' });
@@ -48,7 +45,6 @@ app.post('/api/generate-blog', async (req, res) => {
   }
 });
 
-// ✅ /api/meta-tags
 app.post('/api/meta-tags', async (req, res) => {
   const { title } = req.body || {};
   if (!title) return res.json({ title:'', description:'' });
@@ -62,7 +58,6 @@ app.post('/api/meta-tags', async (req, res) => {
   }
 });
 
-// ✅ /api/linkedin-post
 app.post('/api/linkedin-post', async (req, res) => {
   const { blogMd } = req.body || {};
   if (!blogMd) return res.json({ post: '' });
