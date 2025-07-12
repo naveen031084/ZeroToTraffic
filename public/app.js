@@ -1,28 +1,19 @@
 const API = path => `/api/${path}`;
 const qs = sel => document.querySelector(sel);
 
-async function post(url, body) {
-  const r = await fetch(API(url), {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify(body)
-  });
-  return r.json();
-}
-
 function copy(text) {
   navigator.clipboard.writeText(text);
 }
 
-// 1. Suggest topics
+// 1. Suggest Topics
 async function suggest() {
   const niche = qs('#niche').value.trim();
   if (!niche) return alert('Enter a niche!');
-  qs('#topicList').innerHTML = '<div class="card">Loading…</div>';
+  qs('#topicList').innerHTML = '<div class="topic-card">Loading…</div>';
   const { topics } = await post('suggest-topics', { niche });
   qs('#topicList').innerHTML = topics
     .map(t => `
-      <div class="card">
+      <div class="topic-card">
         <p>${t}</p>
         <button class="copy-btn" title="Copy">📋</button>
       </div>`)
@@ -39,7 +30,7 @@ async function genBlog() {
   qs('#blogOut').innerHTML = '<div class="card">Writing…</div>';
   const { markdown } = await post('generate-blog', { topic });
   qs('#blogOut').innerHTML = `
-    <pre style="white-space: pre-wrap; margin:0;">${markdown}</pre>
+    <pre style="white-space: pre-wrap; margin: 0;">${markdown}</pre>
     <button class="copy-btn" title="Copy">📋</button>`;
   qs('#blogOut .copy-btn').onclick = () => copy(markdown);
 }
@@ -69,8 +60,9 @@ async function genLinkedIn() {
   qs('#liOut .copy-btn').onclick = () => copy(post);
 }
 
-// 5. Content Planner
+// 5. Planner & 6. Tracker
 const plans = JSON.parse(localStorage.plans || '[]');
+const tracks = JSON.parse(localStorage.tracks || '[]');
 function addPlan() {
   const date = qs('#planDate').value;
   const text = qs('#planText').value.trim();
@@ -84,9 +76,6 @@ function renderPlans() {
     .map(p => `<tr><td>${p.date}</td><td>${p.text}</td></tr>`)
     .join('');
 }
-
-// 6. Performance Tracker
-const tracks = JSON.parse(localStorage.tracks || '[]');
 function addTrack() {
   const url = qs('#trackUrl').value.trim();
   const kw = qs('#trackKw').value.trim();
@@ -97,7 +86,7 @@ function addTrack() {
 }
 function renderTracks() {
   qs('#trackTable').innerHTML = tracks
-    .map(t => `<tr><td><a href="${t.url}" target="_blank" rel="noopener">${t.kw}</a></td></tr>`)
+    .map(t => `<tr><td><a href="${t.url}" target="_blank">${t.kw}</a></td></tr>`)
     .join('');
 }
 renderPlans();
