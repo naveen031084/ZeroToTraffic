@@ -60,9 +60,8 @@ async function genLinkedIn() {
   qs('#liOut .copy-btn').onclick = () => copy(post);
 }
 
-// 5. Planner & 6. Tracker
+// 5. Content Planner
 const plans = JSON.parse(localStorage.plans || '[]');
-const tracks = JSON.parse(localStorage.tracks || '[]');
 function addPlan() {
   const date = qs('#planDate').value;
   const text = qs('#planText').value.trim();
@@ -76,6 +75,9 @@ function renderPlans() {
     .map(p => `<tr><td>${p.date}</td><td>${p.text}</td></tr>`)
     .join('');
 }
+
+// 6. Performance Tracker
+const tracks = JSON.parse(localStorage.tracks || '[]');
 function addTrack() {
   const url = qs('#trackUrl').value.trim();
   const kw = qs('#trackKw').value.trim();
