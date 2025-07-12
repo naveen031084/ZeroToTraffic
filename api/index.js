@@ -20,6 +20,7 @@ async function generate(prompt) {
   }
 }
 
+// 1. Suggest topics
 app.post('/api/suggest-topics', async (req, res) => {
   const { niche } = req.body || {};
   if (!niche) return res.json({ topics: [] });
@@ -34,6 +35,7 @@ app.post('/api/suggest-topics', async (req, res) => {
   }
 });
 
+// 2. Generate blog
 app.post('/api/generate-blog', async (req, res) => {
   const { topic, length = 400 } = req.body || {};
   if (!topic) return res.json({ markdown: '' });
@@ -46,6 +48,7 @@ app.post('/api/generate-blog', async (req, res) => {
   }
 });
 
+// 3. Meta tags
 app.post('/api/meta-tags', async (req, res) => {
   const { title } = req.body || {};
   if (!title) return res.json({ title:'', description:'' });
@@ -59,6 +62,7 @@ app.post('/api/meta-tags', async (req, res) => {
   }
 });
 
+// 4. LinkedIn post
 app.post('/api/linkedin-post', async (req, res) => {
   const { blogMd } = req.body || {};
   if (!blogMd) return res.json({ post: '' });
