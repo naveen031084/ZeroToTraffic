@@ -1,0 +1,28 @@
+:root {
+  --bg: #fff; --fg: #111; --accent:#0a84ff;
+}
+[data-theme="dark"] {
+  --bg: #111; --fg: #eee;
+}
+body {
+  margin: 0; font-family: Inter, system-ui, sans-serif;
+  background: var(--bg); color: var(--fg);
+}
+header {
+  display: flex; justify-content: space-between; padding: 1rem;
+}
+section {
+  margin: 2rem auto; max-width: 600px;
+}
+input, textarea, button {
+  width: 100%; font: inherit; padding: .5rem; margin: .25rem 0;
+}
+button {
+  background: var(--accent); color: #fff; border: 0; cursor: pointer;
+}
+pre {
+  background: #f5f5f5; padding: 1rem; white-space: pre-wrap;
+}
+[data-theme="dark"] pre { background: #222; }
+table { width: 100%; border-collapse: collapse; }
+td, th { border: 1px solid #ccc; padding: .25rem .5rem; }
