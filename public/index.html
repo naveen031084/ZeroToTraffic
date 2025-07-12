@@ -4,8 +4,6 @@
   <meta charset="utf-8"/>
   <title>ZeroToTraffic</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css"/>
   <link rel="manifest" href="data:application/manifest+json,{&quot;name&quot;:&quot;ZeroToTraffic&quot;,&quot;display&quot;:&quot;standalone&quot;}"/>
@@ -13,27 +11,27 @@
 <body>
   <header>
     <h1>Zero<span>To</span>Traffic</h1>
-    <button id="themeToggle" aria-label="Toggle theme">🌗</button>
+    <button id="themeToggle" title="Toggle dark / light">🌗</button>
   </header>
 
   <!-- 1. Suggest Topics -->
-  <section id="suggest">
+  <section>
     <h2>🧠 Suggest Topics</h2>
-    <input id="niche" placeholder="Your niche (e.g. SaaS CRM)" />
+    <input id="niche" placeholder="Your niche, e.g. SaaS CRM"/>
     <button onclick="suggest()">Get 10 Ideas</button>
     <div class="grid" id="topicList"></div>
   </section>
 
   <!-- 2. Blog Generator -->
-  <section id="blog">
+  <section>
     <h2>📝 Blog Generator</h2>
-    <textarea id="blogTopic" placeholder="Paste or type a topic"></textarea>
+    <textarea id="blogTopic" placeholder="Topic to write about"></textarea>
     <button onclick="genBlog()">Generate Post</button>
     <div class="card" id="blogOut"></div>
   </section>
 
   <!-- 3. Meta Tags -->
-  <section id="meta">
+  <section>
     <h2>🧪 Meta Tags</h2>
     <input id="metaTitle" placeholder="Title for meta"/>
     <button onclick="metaTags()">Generate</button>
@@ -41,7 +39,7 @@
   </section>
 
   <!-- 4. LinkedIn Post -->
-  <section id="linkedin">
+  <section>
     <h2>💬 LinkedIn Post</h2>
     <textarea id="liText" placeholder="Paste blog markdown here"></textarea>
     <button onclick="genLinkedIn()">Create Post</button>
@@ -49,7 +47,7 @@
   </section>
 
   <!-- 5. Content Planner -->
-  <section id="planner">
+  <section>
     <h2>📅 Content Planner</h2>
     <input type="date" id="planDate"/>
     <input id="planText" placeholder="Post title"/>
@@ -60,7 +58,7 @@
   </section>
 
   <!-- 6. Performance Tracker -->
-  <section id="tracker">
+  <section>
     <h2>📈 Performance Tracker</h2>
     <input id="trackUrl" placeholder="Blog URL"/>
     <input id="trackKw" placeholder="Keyword"/>
