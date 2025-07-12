@@ -1,11 +1,23 @@
+// public/app.js – ZeroToTraffic frontend
 const API = path => `/api/${path}`;
 const qs = sel => document.querySelector(sel);
 
+/* ---- helper ---- */
+async function post(url, body) {
+  const r = await fetch(API(url), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  return r.json();
+}
+
+/* ---- copy ---- */
 function copy(text) {
   navigator.clipboard.writeText(text);
 }
 
-// 1. Suggest Topics
+/* ---- 1. Suggest Topics ---- */
 async function suggest() {
   const niche = qs('#niche').value.trim();
   if (!niche) return alert('Enter a niche!');
@@ -15,52 +27,52 @@ async function suggest() {
     .map(t => `
       <div class="topic-card">
         <p>${t}</p>
-        <button class="copy-btn" title="Copy">📋</button>
+        <button class="copy-btn" title="Copy" onclick="copy('${t.replace(/'/g,"\\'")}')">📋</button>
       </div>`)
     .join('');
-  qs('#topicList').querySelectorAll('.copy-btn').forEach((btn, i) =>
-    btn.onclick = () => copy(topics[i])
-  );
 }
 
-// 2. Blog Generator
+/* ---- 2. Blog Generator ---- */
 async function genBlog() {
   const topic = qs('#blogTopic').value.trim();
   if (!topic) return alert('Enter a topic!');
-  qs('#blogOut').innerHTML = '<div class="card">Writing…</div>';
+  qs('#blogOut').innerHTML = '<div class="topic-card">Writing…</div>';
   const { markdown } = await post('generate-blog', { topic });
   qs('#blogOut').innerHTML = `
-    <pre style="white-space: pre-wrap; margin: 0;">${markdown}</pre>
-    <button class="copy-btn" title="Copy">📋</button>`;
-  qs('#blogOut .copy-btn').onclick = () => copy(markdown);
+    <div class="topic-card">
+      <pre style="white-space: pre-wrap;">${markdown}</pre>
+      <button class="copy-btn" title="Copy" onclick="copy(\`${markdown.replace(/`/g,'\\`')}\`)">📋</button>
+    </div>`;
 }
 
-// 3. Meta Tags
+/* ---- 3. Meta Tags ---- */
 async function metaTags() {
   const title = qs('#metaTitle').value.trim();
   if (!title) return alert('Enter a title!');
-  qs('#metaOut').innerHTML = '<div class="card">Crafting…</div>';
+  qs('#metaOut').innerHTML = '<div class="topic-card">Crafting…</div>';
   const data = await post('meta-tags', { title });
   qs('#metaOut').innerHTML = `
-    <p><strong>Title:</strong> ${data.title}</p>
-    <p><strong>Description:</strong> ${data.description}</p>
-    <button class="copy-btn" title="Copy">📋</button>`;
-  qs('#metaOut .copy-btn').onclick = () => copy(JSON.stringify(data, null, 2));
+    <div class="topic-card">
+      <p><strong>Title:</strong> ${data.title}</p>
+      <p><strong>Description:</strong> ${data.description}</p>
+      <button class="copy-btn" title="Copy" onclick="copy(\`${JSON.stringify(data).replace(/`/g,'\\`')}\`)">📋</button>
+    </div>`;
 }
 
-// 4. LinkedIn Post
+/* ---- 4. LinkedIn Post ---- */
 async function genLinkedIn() {
   const blogMd = qs('#liText').value.trim();
   if (!blogMd) return alert('Paste blog content!');
-  qs('#liOut').innerHTML = '<div class="card">Creating…</div>';
+  qs('#liOut').innerHTML = '<div class="topic-card">Creating…</div>';
   const { post } = await post('linkedin-post', { blogMd });
   qs('#liOut').innerHTML = `
-    <p>${post}</p>
-    <button class="copy-btn" title="Copy">📋</button>`;
-  qs('#liOut .copy-btn').onclick = () => copy(post);
+    <div class="topic-card">
+      <p>${post}</p>
+      <button class="copy-btn" title="Copy" onclick="copy(\`${post.replace(/`/g,'\\`')}\`)">📋</button>
+    </div>`;
 }
 
-// 5. Content Planner
+/* ---- 5. Content Planner ---- */
 const plans = JSON.parse(localStorage.plans || '[]');
 function addPlan() {
   const date = qs('#planDate').value;
@@ -76,7 +88,7 @@ function renderPlans() {
     .join('');
 }
 
-// 6. Performance Tracker
+/* ---- 6. Performance Tracker ---- */
 const tracks = JSON.parse(localStorage.tracks || '[]');
 function addTrack() {
   const url = qs('#trackUrl').value.trim();
@@ -94,7 +106,7 @@ function renderTracks() {
 renderPlans();
 renderTracks();
 
-// Dark mode toggle
+/* ---- dark mode ---- */
 qs('#themeToggle').onclick = () => {
   const html = document.documentElement;
   html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
