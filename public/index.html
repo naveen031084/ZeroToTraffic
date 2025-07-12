@@ -1,66 +1,73 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="utf-8"/>
   <title>ZeroToTraffic</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css"/>
   <link rel="manifest" href="data:application/manifest+json,{&quot;name&quot;:&quot;ZeroToTraffic&quot;,&quot;display&quot;:&quot;standalone&quot;}"/>
 </head>
 <body>
   <header>
-    <h1>ZeroToTraffic</h1>
-    <button id="themeToggle">🌗</button>
+    <h1>Zero<span>To</span>Traffic</h1>
+    <button id="themeToggle" aria-label="Toggle theme">🌗</button>
   </header>
 
   <!-- 1. Suggest Topics -->
-  <section>
+  <section id="suggest">
     <h2>🧠 Suggest Topics</h2>
-    <input id="niche" placeholder="e.g. SaaS CRM"/>
+    <input id="niche" placeholder="Your niche (e.g. SaaS CRM)" />
     <button onclick="suggest()">Get 10 Ideas</button>
-    <div id="topicList"></div>
+    <div class="grid" id="topicList"></div>
   </section>
 
   <!-- 2. Blog Generator -->
-  <section>
+  <section id="blog">
     <h2>📝 Blog Generator</h2>
-    <textarea id="blogTopic" rows="2" placeholder="Topic to write about"></textarea>
+    <textarea id="blogTopic" placeholder="Paste or type a topic"></textarea>
     <button onclick="genBlog()">Generate Post</button>
-    <pre id="blogOut"></pre>
+    <div class="card" id="blogOut"></div>
   </section>
 
   <!-- 3. Meta Tags -->
-  <section>
+  <section id="meta">
     <h2>🧪 Meta Tags</h2>
     <input id="metaTitle" placeholder="Title for meta"/>
     <button onclick="metaTags()">Generate</button>
-    <pre id="metaOut"></pre>
+    <div class="card" id="metaOut"></div>
   </section>
 
   <!-- 4. LinkedIn Post -->
-  <section>
+  <section id="linkedin">
     <h2>💬 LinkedIn Post</h2>
-    <textarea id="liText" rows="3" placeholder="Paste blog markdown"></textarea>
+    <textarea id="liText" placeholder="Paste blog markdown here"></textarea>
     <button onclick="genLinkedIn()">Create Post</button>
-    <pre id="liOut"></pre>
+    <div class="card" id="liOut"></div>
   </section>
 
   <!-- 5. Content Planner -->
-  <section>
+  <section id="planner">
     <h2>📅 Content Planner</h2>
     <input type="date" id="planDate"/>
     <input id="planText" placeholder="Post title"/>
     <button onclick="addPlan()">Add</button>
-    <table id="planTable"></table>
+    <div class="table-wrap">
+      <table id="planTable"></table>
+    </div>
   </section>
 
   <!-- 6. Performance Tracker -->
-  <section>
+  <section id="tracker">
     <h2>📈 Performance Tracker</h2>
-    <input id="trackUrl" placeholder="https://mysite.com/post"/>
-    <input id="trackKw" placeholder="keyword"/>
+    <input id="trackUrl" placeholder="Blog URL"/>
+    <input id="trackKw" placeholder="Keyword"/>
     <button onclick="addTrack()">Save</button>
-    <table id="trackTable"></table>
+    <div class="table-wrap">
+      <table id="trackTable"></table>
+    </div>
   </section>
 
 <script src="app.js"></script>
