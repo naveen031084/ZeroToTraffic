@@ -14,7 +14,6 @@
   --surface: #f5f5f7;
   --surface-light: #e5e5ea;
   --text: #111;
-  --text-muted: #555;
   --shadow: 0 8px 32px rgba(0,0,0,.08);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,6 +22,7 @@ body {
   background: var(--bg);
   color: var(--text);
   padding: 2rem 1rem;
+  line-height: 1.5;
 }
 header {
   display: flex;
@@ -30,7 +30,11 @@ header {
   align-items: center;
   margin-bottom: 2.5rem;
 }
-header h1 { font-weight: 600; font-size: 2rem; letter-spacing: -.03em; }
+header h1 {
+  font-weight: 600;
+  font-size: 2rem;
+  letter-spacing: -.03em;
+}
 header h1 span { color: var(--accent); }
 button {
   background: var(--accent);
@@ -42,7 +46,7 @@ button {
   cursor: pointer;
   transition: transform .15s;
 }
-button:hover { transform: translateY(-1px); }
+button:hover { transform: translateY(-2px); }
 input, textarea {
   width: 100%;
   background: var(--surface-light);
@@ -51,10 +55,11 @@ input, textarea {
   padding: .9rem 1rem;
   color: var(--text);
   font-size: 1rem;
+  margin: .5rem 0;
 }
 textarea { resize: vertical; min-height: 100px; }
 section {
-  max-width: 700px;
+  max-width: 720px;
   margin: 0 auto 3rem;
 }
 section h2 {
@@ -69,7 +74,7 @@ section h2 {
 .card {
   background: var(--surface);
   border-radius: var(--radius);
-  padding: 1.25rem;
+  padding: 1.5rem;
   box-shadow: var(--shadow);
   position: relative;
 }
@@ -81,10 +86,13 @@ section h2 {
   color: #fff;
   border: none;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   font-size: 14px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .table-wrap {
   overflow-x: auto;
