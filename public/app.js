@@ -1,4 +1,3 @@
-// public/app.js – ZeroToTraffic frontend
 const API = path => `/api/${path}`;
 const qs = sel => document.querySelector(sel);
 
@@ -12,7 +11,6 @@ async function post(url, body) {
   return r.json();
 }
 
-/* ---- copy ---- */
 function copy(text) {
   navigator.clipboard.writeText(text);
 }
@@ -36,11 +34,11 @@ async function suggest() {
 async function genBlog() {
   const topic = qs('#blogTopic').value.trim();
   if (!topic) return alert('Enter a topic!');
-  qs('#blogOut').innerHTML = '<div class="topic-card">Writing…</div>';
+  qs('#blogOut').innerHTML = '<div class="card">Writing…</div>';
   const { markdown } = await post('generate-blog', { topic });
   qs('#blogOut').innerHTML = `
-    <div class="topic-card">
-      <pre style="white-space: pre-wrap;">${markdown}</pre>
+    <div class="card">
+      <pre style="white-space: pre-wrap; margin:0;">${markdown}</pre>
       <button class="copy-btn" title="Copy" onclick="copy(\`${markdown.replace(/`/g,'\\`')}\`)">📋</button>
     </div>`;
 }
@@ -49,10 +47,10 @@ async function genBlog() {
 async function metaTags() {
   const title = qs('#metaTitle').value.trim();
   if (!title) return alert('Enter a title!');
-  qs('#metaOut').innerHTML = '<div class="topic-card">Crafting…</div>';
+  qs('#metaOut').innerHTML = '<div class="card">Crafting…</div>';
   const data = await post('meta-tags', { title });
   qs('#metaOut').innerHTML = `
-    <div class="topic-card">
+    <div class="card">
       <p><strong>Title:</strong> ${data.title}</p>
       <p><strong>Description:</strong> ${data.description}</p>
       <button class="copy-btn" title="Copy" onclick="copy(\`${JSON.stringify(data).replace(/`/g,'\\`')}\`)">📋</button>
@@ -63,10 +61,10 @@ async function metaTags() {
 async function genLinkedIn() {
   const blogMd = qs('#liText').value.trim();
   if (!blogMd) return alert('Paste blog content!');
-  qs('#liOut').innerHTML = '<div class="topic-card">Creating…</div>';
+  qs('#liOut').innerHTML = '<div class="card">Creating…</div>';
   const { post } = await post('linkedin-post', { blogMd });
   qs('#liOut').innerHTML = `
-    <div class="topic-card">
+    <div class="card">
       <p>${post}</p>
       <button class="copy-btn" title="Copy" onclick="copy(\`${post.replace(/`/g,'\\`')}\`)">📋</button>
     </div>`;
