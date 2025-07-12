@@ -14,23 +14,20 @@
     <button id="themeToggle" title="Toggle dark / light">🌗</button>
   </header>
 
-  <!-- 1. Suggest -->
   <section>
     <h2>🧠 Suggest Topics</h2>
     <input id="niche" placeholder="Your niche, e.g. SaaS CRM"/>
     <button onclick="suggest()">Get 10 Ideas</button>
-    <div class="topic-grid" id="topicList"></div>
+    <div class="grid" id="topicList"></div>
   </section>
 
-  <!-- 2. Blog -->
   <section>
     <h2>📝 Blog Generator</h2>
-    <textarea id="blogTopic" placeholder="Paste or type a topic"></textarea>
+    <textarea id="blogTopic" placeholder="Topic to write about"></textarea>
     <button onclick="genBlog()">Generate Post</button>
     <div class="card" id="blogOut"></div>
   </section>
 
-  <!-- 3. Meta -->
   <section>
     <h2>🧪 Meta Tags</h2>
     <input id="metaTitle" placeholder="Title for meta"/>
@@ -38,7 +35,6 @@
     <div class="card" id="metaOut"></div>
   </section>
 
-  <!-- 4. LinkedIn -->
   <section>
     <h2>💬 LinkedIn Post</h2>
     <textarea id="liText" placeholder="Paste blog markdown here"></textarea>
@@ -46,7 +42,6 @@
     <div class="card" id="liOut"></div>
   </section>
 
-  <!-- 5. Planner -->
   <section>
     <h2>📅 Content Planner</h2>
     <input type="date" id="planDate"/>
@@ -57,7 +52,6 @@
     </div>
   </section>
 
-  <!-- 6. Tracker -->
   <section>
     <h2>📈 Performance Tracker</h2>
     <input id="trackUrl" placeholder="Blog URL"/>
