@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8"/>
+  <title>ZeroToTraffic</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="manifest" href="data:application/manifest+json,{&quot;name&quot;:&quot;ZeroToTraffic&quot;,&quot;display&quot;:&quot;standalone&quot;}"/>
+</head>
+<body>
+  <header>
+    <h1>ZeroToTraffic</h1>
+    <button id="themeToggle">🌗</button>
+  </header>
+
+  <!-- 1. Suggest Topics -->
+  <section>
+    <h2>🧠 Suggest Topics</h2>
+    <input id="niche" placeholder="e.g. SaaS CRM"/>
+    <button onclick="suggest()">Get 10 Ideas</button>
+    <div id="topicList"></div>
+  </section>
+
+  <!-- 2. Blog Generator -->
+  <section>
+    <h2>📝 Blog Generator</h2>
+    <textarea id="blogTopic" rows="2" placeholder="Topic to write about"></textarea>
+    <button onclick="genBlog()">Generate Post</button>
+    <pre id="blogOut"></pre>
+  </section>
+
+  <!-- 3. Meta Tags -->
+  <section>
+    <h2>🧪 Meta Tags</h2>
+    <input id="metaTitle" placeholder="Title for meta"/>
+    <button onclick="metaTags()">Generate</button>
+    <pre id="metaOut"></pre>
+  </section>
+
+  <!-- 4. LinkedIn Post -->
+  <section>
+    <h2>💬 LinkedIn Post</h2>
+    <textarea id="liText" rows="3" placeholder="Paste blog markdown"></textarea>
+    <button onclick="genLinkedIn()">Create Post</button>
+    <pre id="liOut"></pre>
+  </section>
+
+  <!-- 5. Content Planner -->
+  <section>
+    <h2>📅 Content Planner</h2>
+    <input type="date" id="planDate"/>
+    <input id="planText" placeholder="Post title"/>
+    <button onclick="addPlan()">Add</button>
+    <table id="planTable"></table>
+  </section>
+
+  <!-- 6. Performance Tracker -->
+  <section>
+    <h2>📈 Performance Tracker</h2>
+    <input id="trackUrl" placeholder="https://mysite.com/post"/>
+    <input id="trackKw" placeholder="keyword"/>
+    <button onclick="addTrack()">Save</button>
+    <table id="trackTable"></table>
+  </section>
+
+<script src="app.js"></script>
+<script>navigator.serviceWorker.register('sw.js');</script>
+</body>
+</html>
