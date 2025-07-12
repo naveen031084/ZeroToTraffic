@@ -1,78 +1,113 @@
-// api/index.js – ZeroToTraffic backend
-import express from 'express';
-import cors from 'cors';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+// public/app.js – ZeroToTraffic frontend
+const API = path => `/api/${path}`;
+const qs = sel => document.querySelector(sel);
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-const key = process.env.GEMINI_KEY;
-const genAI = new GoogleGenerativeAI(key);
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
-async function generate(prompt) {
-  try {
-    const result = await model.generateContent(prompt);
-    return result.response.text();
-  } catch {
-    throw new Error('Gemini error');
-  }
+/* ---- helper ---- */
+async function post(url, body) {
+  const r = await fetch(API(url), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  return r.json();
 }
 
-// ✅ /api/suggest-topics
-app.post('/api/suggest-topics', async (req, res) => {
-  const { niche } = req.body || {};
-  if (!niche) return res.json({ topics: [] });
-  const prompt = `Give 10 catchy blog/LinkedIn topics for a ${niche} business. Return only a JSON array of strings.`;
-  try {
-    const text = await generate(prompt);
-    const cleaned = text.replace(/```json|```/g, '').trim();
-    const topics = JSON.parse(cleaned);
-    res.json({ topics });
-  } catch {
-    res.json({ topics: ['Topic 1','Topic 2','Topic 3','Topic 4','Topic 5','Topic 6','Topic 7','Topic 8','Topic 9','Topic 10'] });
-  }
-});
+/* ---- copy ---- */
+function copy(text) {
+  navigator.clipboard.writeText(text);
+}
 
-// ✅ /api/generate-blog
-app.post('/api/generate-blog', async (req, res) => {
-  const { topic, length = 400 } = req.body || {};
-  if (!topic) return res.json({ markdown: '' });
-  const prompt = `Write an SEO-optimized blog post (~${length} words) about: ${topic}. Return markdown.`;
-  try {
-    const md = await generate(prompt);
-    res.json({ markdown: md });
-  } catch {
-    res.json({ markdown: `# ${topic}\n\nComing soon…` });
-  }
-});
+/* ---- 1. Suggest Topics ---- */
+async function suggest() {
+  const niche = qs('#niche').value.trim();
+  if (!niche) return alert('Enter a niche!');
+  qs('#topicList').innerHTML = '<div class="topic-card">Loading…</div>';
+  const { topics } = await post('suggest-topics', { niche });
+  qs('#topicList').innerHTML = topics
+    .map(t => `
+      <div class="topic-card">
+        <p>${t}</p>
+        <button class="copy-btn" title="Copy" onclick="copy('${t.replace(/'/g,"\\'")}')">📋</button>
+      </div>`)
+    .join('');
+}
 
-// ✅ /api/meta-tags
-app.post('/api/meta-tags', async (req, res) => {
-  const { title } = req.body || {};
-  if (!title) return res.json({ title:'', description:'' });
-  const prompt = `Create SEO meta title (≤60 chars) and meta description (≤160 chars) for: ${title}. Return JSON {title, description}.`;
-  try {
-    const text = await generate(prompt);
-    const data = JSON.parse(text.replace(/```json|```/g, '').trim());
-    res.json(data);
-  } catch {
-    res.json({ title, description: `Read our guide on ${title}.` });
-  }
-});
+/* ---- 2. Blog Generator ---- */
+async function genBlog() {
+  const topic = qs('#blogTopic').value.trim();
+  if (!topic) return alert('Enter a topic!');
+  qs('#blogOut').innerHTML = '<div class="topic-card">Writing…</div>';
+  const { markdown } = await post('generate-blog', { topic });
+  qs('#blogOut').innerHTML = `
+    <div class="topic-card">
+      <pre style="white-space: pre-wrap;">${markdown}</pre>
+      <button class="copy-btn" title="Copy" onclick="copy(\`${markdown.replace(/`/g,'\\`')}\`)">📋</button>
+    </div>`;
+}
 
-// ✅ /api/linkedin-post
-app.post('/api/linkedin-post', async (req, res) => {
-  const { blogMd } = req.body || {};
-  if (!blogMd) return res.json({ post: '' });
-  const prompt = `Turn this blog into a short, engaging LinkedIn post with 3 emojis and a CTA. Return plain text.\n\n${blogMd}`;
-  try {
-    const post = await generate(prompt);
-    res.json({ post });
-  } catch {
-    res.json({ post: 'Just published a new article! 🚀 Check it out 👇' });
-  }
-});
+/* ---- 3. Meta Tags ---- */
+async function metaTags() {
+  const title = qs('#metaTitle').value.trim();
+  if (!title) return alert('Enter a title!');
+  qs('#metaOut').innerHTML = '<div class="topic-card">Crafting…</div>';
+  const data = await post('meta-tags', { title });
+  qs('#metaOut').innerHTML = `
+    <div class="topic-card">
+      <p><strong>Title:</strong> ${data.title}</p>
+      <p><strong>Description:</strong> ${data.description}</p>
+      <button class="copy-btn" title="Copy" onclick="copy(\`${JSON.stringify(data).replace(/`/g,'\\`')}\`)">📋</button>
+    </div>`;
+}
 
-export default app;
+/* ---- 4. LinkedIn Post ---- */
+async function genLinkedIn() {
+  const blogMd = qs('#liText').value.trim();
+  if (!blogMd) return alert('Paste blog content!');
+  qs('#liOut').innerHTML = '<div class="topic-card">Creating…</div>';
+  const { post } = await post('linkedin-post', { blogMd });
+  qs('#liOut').innerHTML = `
+    <div class="topic-card">
+      <p>${post}</p>
+      <button class="copy-btn" title="Copy" onclick="copy(\`${post.replace(/`/g,'\\`')}\`)">📋</button>
+    </div>`;
+}
+
+/* ---- 5. Content Planner ---- */
+const plans = JSON.parse(localStorage.plans || '[]');
+function addPlan() {
+  const date = qs('#planDate').value;
+  const text = qs('#planText').value.trim();
+  if (!date || !text) return alert('Fill both fields!');
+  plans.unshift({ date, text });
+  localStorage.plans = JSON.stringify(plans);
+  renderPlans();
+}
+function renderPlans() {
+  qs('#planTable').innerHTML = plans
+    .map(p => `<tr><td>${p.date}</td><td>${p.text}</td></tr>`)
+    .join('');
+}
+
+/* ---- 6. Performance Tracker ---- */
+const tracks = JSON.parse(localStorage.tracks || '[]');
+function addTrack() {
+  const url = qs('#trackUrl').value.trim();
+  const kw = qs('#trackKw').value.trim();
+  if (!url || !kw) return alert('Fill both fields!');
+  tracks.unshift({ url, kw });
+  localStorage.tracks = JSON.stringify(tracks);
+  renderTracks();
+}
+function renderTracks() {
+  qs('#trackTable').innerHTML = tracks
+    .map(t => `<tr><td><a href="${t.url}" target="_blank">${t.kw}</a></td></tr>`)
+    .join('');
+}
+renderPlans();
+renderTracks();
+
+/* ---- dark mode ---- */
+qs('#themeToggle').onclick = () => {
+  const html = document.documentElement;
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+};
